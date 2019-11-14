@@ -1,0 +1,31 @@
+include "../ldpl_socket/ldpl_socket.ldpl"
+
+data:
+    input is text
+    sock is number
+    reply is text
+    host is text
+    port is number
+
+procedure:
+    store "localhost" in host
+    store 8888 in port
+    socket connect to host at port in sock
+    display "~ Connected to " host ":" port " (socket:" sock ")" crlf
+    socket read from sock in reply # welcome msg
+    trim reply in reply
+    if reply is not equal to "" then 
+        display "< " reply crlf 
+    end if
+    while sock is greater than or equal to 0 do
+        store "" in input
+        display "> "
+        accept input
+        in input join input "\n"
+        socket send input to sock
+        socket read from sock in reply
+        trim reply in reply
+        if reply is not equal to "" then 
+            display "< " reply crlf
+        end if 
+    repeat
