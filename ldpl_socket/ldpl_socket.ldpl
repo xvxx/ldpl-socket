@@ -95,4 +95,4 @@ sub ldpl.socket.set-nonblocking
         store socket_dest in LDPL_SOCKET_NUMBER
         call external LDPL_SOCKET_SET_NONBLOCKING
 end sub
-create statement "SOCKET SeT NONBLOCKING $" executing ldpl.socket.set-nonblocking
+create statement "SOCKET SET NONBLOCKING $" executing ldpl.socket.set-nonblocking
