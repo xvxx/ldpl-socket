@@ -26,19 +26,19 @@ ldpl_number LDPL_SOCKET_NUMBER;
 unordered_map<int, bool> blocking; // user-set socket state
 
 void socket_connected(int socket_number, string ip, unsigned int port){
-	LDPL_SOCKET_IP = ip;
-	LDPL_SOCKET_PORT = port;
-	LDPL_SOCKET_NUMBER = socket_number;
+    LDPL_SOCKET_IP = ip;
+    LDPL_SOCKET_PORT = port;
+    LDPL_SOCKET_NUMBER = socket_number;
     blocking[socket_number] = true;
 }
 
 void socket_closed(int socket_number){
-	LDPL_SOCKET_NUMBER = socket_number;
+    LDPL_SOCKET_NUMBER = socket_number;
 }
 
 void socket_onmessage(int socket_number, string message){
-	LDPL_SOCKET_NUMBER = socket_number;
-	LDPL_SOCKET_MSG = message;
+    LDPL_SOCKET_NUMBER = socket_number;
+    LDPL_SOCKET_MSG = message;
 }
 
 // set blocking vs non-blocking
