@@ -14,7 +14,6 @@ extern ldpl_number VAR_ERRORCODE;
 extern ldpl_text   VAR_ERRORTEXT;
 
 #define BUF_SIZE 1024
-#define FATAL(text) { perror(text); exit(1); }
 #define DEBUG(text) { cout << "\e[33;1m" << text << "\e[0m" << endl; }
 #define SETS_ERRORCODE() { VAR_ERRORCODE = 0; VAR_ERRORTEXT = ""; }
 
@@ -50,19 +49,24 @@ void socket_set_flags(int sock){
 }
 
 void LDPL_SOCKET_CONNECT(){
+    SETS_ERRORCODE();
     const string host = LDPL_SOCKET_IP.str_rep();
     int port = LDPL_SOCKET_PORT;
     int sock;
-    if((sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
-        FATAL("socket() failed");
+    if((sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0){
+        VAR_ERRORCODE = sock;
+        VAR_ERRORTEXT = "socket() failed";
+    }
 
     struct sockaddr_in addr;
     memset(&addr, 0, sizeof(addr));
     struct hostent *h = gethostbyname(host.c_str());
     if(h == NULL){
-        FATAL("bad hostname");
+        VAR_ERRORCODE = -1;
+        VAR_ERRORTEXT = "bad hostname";
     }else if(h->h_length <= 0){
-        FATAL("gethostbyname() failed");
+        VAR_ERRORCODE = -1;
+        VAR_ERRORTEXT = "gethostbyname() failed";
     }
     char *ip = inet_ntoa(*(struct in_addr*)(h->h_addr_list[0]));
     addr.sin_family      = AF_INET;
@@ -70,8 +74,10 @@ void LDPL_SOCKET_CONNECT(){
     addr.sin_port        = htons(port);
 
     int err;
-    if((err = connect(sock,(struct sockaddr*)&addr,sizeof(addr))) < 0)
-        FATAL("connect() failed");
+    if((err = connect(sock,(struct sockaddr*)&addr,sizeof(addr))) < 0){
+        VAR_ERRORCODE = err;
+        VAR_ERRORTEXT = "connect() failed";
+    }
     if(sock >= 0) {
         socket_connected(sock, host, port);
         LDPL_SOCKET_NUMBER = sock;

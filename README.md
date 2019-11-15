@@ -36,7 +36,7 @@ ready to be used.
 This library adds a few new statements to the language:
 
 - `SOCKET CONNECT TO <hostname> AT <port> IN <number variable>`
-   - Use this statement to open a new socket connection. Currently only TCP connections are supported. If the connection is successfully opened, your `<number var>` will be set to a "socket number" that's >= 0. Otherwise it's an error.
+   - Use this statement to open a new socket connection. Currently only TCP connections are supported. If the connection is successfully opened, your `<number var>` will be set to a "socket number" that's >= 0. Otherwise, `ERRORCODE` will be set to a negative number.
 - `SOCKET CLOSE <socket number>`
    - Once a socket has been opened, use this statement to close it.
 - `SOCKET SEND <text> TO <socket number>`
