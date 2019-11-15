@@ -6,15 +6,32 @@ It's mostly made for clients - if you want to write a server, please see the lib
 
 Requires **LDPL 4.3** or greater.
 
-## Installation
+## 🧰 Installation
+
+You can install this library **by hand** or **using [LPM](https://github.com/Lartu/ldpl#-libraries)**.
+
+### 📦 Installing using LPM
+
+Open a terminal and write `lpm install ldpl_socket`. Once downloaded, include it in your LDPL project by adding the line:
+
+```coffeescript
+using package ldpl_socket
+```
+
+before the `data` and `procedure` sections of your source file. The library is ready to be used.
+
+### ✋🏻 Installing by hand
 
 Include the library into your LDPL project by copying the folder *ldpl_socket* to your project directory and then adding the line:
 
-`INCLUDE "ldpl_socket/ldpl_socket.ldpl"`
+```coffeescript
+include "ldpl_socket/ldpl_socket.ldpl"
+```
 
-before the `DATA` and `PROCEDURE` sections of your main LDPL project file. The library is now ready to be used.
+before the `data` and `procedure` sections of your source file. The library is
+ready to be used.
 
-## Usage
+## 📚 Documentation
 
 This library adds a few new statements to the language:
 
@@ -27,7 +44,7 @@ This library adds a few new statements to the language:
 - `SOCKET READ FROM <socket number> IN <text variable>`
    - This statement should be used to check for messages on a socket connection opened with `SOCKET CONNECT TO <ip> PORT <port>`. `<text variable>` will be set to anything received from the socket, which may not be an entire "message" in whatever protocol you're using. 
    
-## Example
+## 👷‍♂️ Example
 
 There's an example echo client in `examples/echo-client.ldpl`. Use it with Lartu's demo echo server by cloning that project and running the template:
 
@@ -50,6 +67,6 @@ You should now be in a little echo repl:
     > ...or have I?
     < ...or have I?
 
-## License
+## :scroll: License
 
 This library is released under the MIT License.
