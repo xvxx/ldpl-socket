@@ -6,6 +6,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <unistd.h>
+#include <fcntl.h>    /* For F_SETFL */
 
 using namespace std;
 
@@ -94,4 +95,19 @@ void LDPL_SOCKET_READ(){
     buf[bytes] = 0;
     LDPL_SOCKET_MSG = buf;
 }
+
+void LDPL_SOCKET_POLL(){
+    int sock = LDPL_SOCKET_NUMBER;
+    fcntl(sock, F_SETFL, O_NONBLOCK);
+    char buf[BUF_SIZE];
+    int bytes = read(sock, buf, BUF_SIZE);
+    if(bytes < 0) {
+        //socket_closed(sock);
+        LDPL_SOCKET_MSG = "";
+        return;
+    }
+    buf[bytes] = 0;
+    LDPL_SOCKET_MSG = buf;
+}
+
 

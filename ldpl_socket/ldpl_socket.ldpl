@@ -45,6 +45,17 @@ sub ldpl.socket.read
 end sub
 create statement "SOCKET READ FROM $ in $" executing ldpl.socket.read
 
+sub ldpl.socket.poll
+    parameters:
+        sock is number
+        msg_var is text
+    procedure:
+        store sock in LDPL_SOCKET_NUMBER
+        call external LDPL_SOCKET_POLL
+        store LDPL_SOCKET_MSG in msg_var
+end sub
+create statement "SOCKET POLL FROM $ in $" executing ldpl.socket.poll
+
 sub ldpl.socket.send
     parameters:
         message is text
