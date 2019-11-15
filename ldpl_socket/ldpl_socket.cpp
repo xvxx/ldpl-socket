@@ -25,17 +25,17 @@ ldpl_number LDPL_SOCKET_NUMBER;
 
 unordered_map<int, bool> nonblocking; // user-set socket state
 
-void socket_connected(unsigned int socket_number, string ip, unsigned int port){
+void socket_connected(int socket_number, string ip, unsigned int port){
 	LDPL_SOCKET_IP = ip;
 	LDPL_SOCKET_PORT = port;
 	LDPL_SOCKET_NUMBER = socket_number;
 }
 
-void socket_closed(unsigned int socket_number){
+void socket_closed(int socket_number){
 	LDPL_SOCKET_NUMBER = socket_number;
 }
 
-void socket_onmessage(unsigned int socket_number, string message){
+void socket_onmessage(int socket_number, string message){
 	LDPL_SOCKET_NUMBER = socket_number;
 	LDPL_SOCKET_MSG = message;
 }
@@ -70,14 +70,14 @@ void LDPL_SOCKET_CONNECT(){
 }
 
 void LDPL_SOCKET_CLOSE(){
-    unsigned int sock = LDPL_SOCKET_NUMBER;
+    int sock = LDPL_SOCKET_NUMBER;
     if(sock < 0) return;
     socket_closed(sock);
     close(sock); 
 }
 
 void LDPL_SOCKET_SENDMESSAGE(){
-    unsigned int sock = LDPL_SOCKET_NUMBER;
+    int sock = LDPL_SOCKET_NUMBER;
     const string msg = LDPL_SOCKET_MSG.str_rep();
 
     int sent = 0, bytes = 0;
