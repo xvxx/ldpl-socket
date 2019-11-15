@@ -23,12 +23,13 @@ ldpl_text LDPL_SOCKET_IP;
 ldpl_number LDPL_SOCKET_PORT;
 ldpl_number LDPL_SOCKET_NUMBER; 
 
-unordered_map<int, bool> nonblocking; // user-set socket state
+unordered_map<int, bool> blocking; // user-set socket state
 
 void socket_connected(int socket_number, string ip, unsigned int port){
 	LDPL_SOCKET_IP = ip;
 	LDPL_SOCKET_PORT = port;
 	LDPL_SOCKET_NUMBER = socket_number;
+    blocking[socket_number] = true;
 }
 
 void socket_closed(int socket_number){
@@ -38,6 +39,13 @@ void socket_closed(int socket_number){
 void socket_onmessage(int socket_number, string message){
 	LDPL_SOCKET_NUMBER = socket_number;
 	LDPL_SOCKET_MSG = message;
+}
+
+// set blocking vs non-blocking
+void socket_set_flags(int sock){
+    int flags = fcntl(sock, F_GETFL, 0);
+    flags = blocking[sock] ? (flags & ~O_NONBLOCK) : (flags | O_NONBLOCK);
+    fcntl(sock, F_SETFL, flags);
 }
 
 void LDPL_SOCKET_CONNECT(){
@@ -78,6 +86,7 @@ void LDPL_SOCKET_CLOSE(){
 
 void LDPL_SOCKET_SENDMESSAGE(){
     int sock = LDPL_SOCKET_NUMBER;
+    socket_set_flags(sock);
     const string msg = LDPL_SOCKET_MSG.str_rep();
 
     int sent = 0, bytes = 0;
@@ -92,11 +101,7 @@ void LDPL_SOCKET_SENDMESSAGE(){
 void LDPL_SOCKET_READ(){
     SETS_ERRORCODE()
     int sock = LDPL_SOCKET_NUMBER;
-
-    // set blocking vs non-blocking
-    int flags = fcntl(sock, F_GETFL, 0);
-    flags = nonblocking[sock] ? (flags | O_NONBLOCK) : (flags & ~O_NONBLOCK);
-    fcntl(sock, F_SETFL, flags);
+    socket_set_flags(sock);
 
     char buf[BUF_SIZE];
     int bytes = read(sock, buf, BUF_SIZE);
@@ -119,10 +124,10 @@ void LDPL_SOCKET_READ(){
 
 void LDPL_SOCKET_SET_BLOCKING(){
     int sock = LDPL_SOCKET_NUMBER;
-    nonblocking[sock] = false;
+    blocking[sock] = true;
 }
 
 void LDPL_SOCKET_SET_NONBLOCKING(){
     int sock = LDPL_SOCKET_NUMBER;
-    nonblocking[sock] = true;
+    blocking[sock] = false;
 }
