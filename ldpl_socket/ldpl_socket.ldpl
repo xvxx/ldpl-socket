@@ -55,3 +55,21 @@ sub ldpl.socket.send
         call external LDPL_SOCKET_SENDMESSAGE
 end sub
 create statement "SOCKET SEND $ TO $" executing ldpl.socket.send
+
+sub ldpl.socket.set-blocking
+    parameters:
+        socket_dest is number
+    procedure:
+        store socket_dest in LDPL_SOCKET_NUMBER
+        call external LDPL_SOCKET_SET_BLOCKING
+end sub
+create statement "SOCKET SET BLOCKING $" executing ldpl.socket.set-blocking
+
+sub ldpl.socket.set-nonblocking
+    parameters:
+        socket_dest is number
+    procedure:
+        store socket_dest in LDPL_SOCKET_NUMBER
+        call external LDPL_SOCKET_SET_NONBLOCKING
+end sub
+create statement "SOCKET SeT NONBLOCKING $" executing ldpl.socket.set-nonblocking

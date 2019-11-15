@@ -42,7 +42,10 @@ This library adds a few new statements to the language:
 - `SOCKET SEND <text> TO <socket number>`
    - Use this to send messages to an open connection.
 - `SOCKET READ FROM <socket number> IN <text variable>`
-   - This statement should be used to check for messages on a socket connection opened with `SOCKET CONNECT TO <ip> PORT <port>`. `<text variable>` will be set to anything received from the socket, which may not be an entire "message" in whatever protocol you're using. 
+   - This statement should be used to check for messages on a socket connection opened with `SOCKET CONNECT TO <ip> PORT <port>`. `<text variable>` will be set to anything received from the socket, which may not be an entire "message" in whatever protocol you're using. `ERRORCODE` will be set to 1 if the connection is closed. **Note:** By default this is a blocking call. Use the next statements to change that.
+- `SOCKET SET BLOCKING <socket number>`
+- `SOCKET SET NONBLOCKING <socket number>`
+   - By default all socket reads are blocking, but if you want to do a nonblocking call (or ensure you're using a blocking one) then these statements are for you. Basically they set/unset `O_NONBLOCK` on the underlying socket. In LDPL, `ERRORCODE` will be set to < 0 if there is an error or (most common in nonblocking mode) no data was available to be read. So, check for that.
    
 ## 👷‍♂️ Example
 
