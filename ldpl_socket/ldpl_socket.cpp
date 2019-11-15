@@ -22,6 +22,7 @@ ldpl_text LDPL_SOCKET_MSG;
 ldpl_text LDPL_SOCKET_IP;
 ldpl_number LDPL_SOCKET_PORT;
 ldpl_number LDPL_SOCKET_NUMBER; 
+ldpl_number LDPL_SOCKET_BYTES; 
 
 unordered_map<int, bool> blocking; // user-set socket state
 
@@ -85,21 +86,27 @@ void LDPL_SOCKET_CLOSE(){
 }
 
 void LDPL_SOCKET_SENDMESSAGE(){
+    SETS_ERRORCODE();
+    LDPL_SOCKET_BYTES = 0;
     int sock = LDPL_SOCKET_NUMBER;
     socket_set_flags(sock);
     const string msg = LDPL_SOCKET_MSG.str_rep();
 
     int sent = 0, bytes = 0;
     while(sent < msg.size()){
-        if((bytes = send(sock, msg.c_str(), msg.size(), MSG_DONTWAIT)) < 0)
-            FATAL("send() call failed");
+        if((bytes = send(sock, msg.c_str(), msg.size(), 0)) < 0){
+            VAR_ERRORCODE = bytes;
+            VAR_ERRORTEXT = "send() call failed";
+            return;
+        }
         sent += bytes;
     }
-    return;
+    LDPL_SOCKET_BYTES = sent;
 }
 
 void LDPL_SOCKET_READ(){
-    SETS_ERRORCODE()
+    SETS_ERRORCODE();
+    LDPL_SOCKET_BYTES = 0;
     int sock = LDPL_SOCKET_NUMBER;
     socket_set_flags(sock);
 
@@ -119,6 +126,7 @@ void LDPL_SOCKET_READ(){
     }
     buf[bytes] = 0;
     LDPL_SOCKET_MSG = buf;
+    LDPL_SOCKET_BYTES = bytes;
 }
 
 
