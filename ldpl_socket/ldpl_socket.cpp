@@ -16,6 +16,7 @@ extern ldpl_text   VAR_ERRORTEXT;
 #define BUF_SIZE 1024
 #define FATAL(text) { perror(text); exit(1); }
 #define DEBUG(text) { cout << "\e[33;1m" << text << "\e[0m" << endl; }
+#define SETS_ERRORCODE() { VAR_ERRORCODE = 0; VAR_ERRORTEXT = ""; }
 
 ldpl_text LDPL_SOCKET_MSG;
 ldpl_text LDPL_SOCKET_IP;
@@ -89,8 +90,7 @@ void LDPL_SOCKET_SENDMESSAGE(){
 }
 
 void LDPL_SOCKET_READ(){
-    VAR_ERRORCODE = 0;
-    VAR_ERRORTEXT = "";
+    SETS_ERRORCODE()
     int sock = LDPL_SOCKET_NUMBER;
 
     // set blocking vs non-blocking
