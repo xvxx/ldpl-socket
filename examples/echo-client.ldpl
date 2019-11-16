@@ -6,6 +6,7 @@ data:
     reply is text
     host is text
     port is number
+    bytes is number
 
 procedure:
     store "localhost" in host
@@ -23,7 +24,11 @@ procedure:
         accept input
         in input join input "\n"
         socket send input to sock
-        socket read from sock in reply
+        socket read from sock in reply bytes in bytes
+        if bytes is equal to 0 then
+          display "> disconnected" crlf
+          break
+        end if
         trim reply in reply
         if reply is not equal to "" then 
             display "< " reply crlf
