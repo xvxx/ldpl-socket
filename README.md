@@ -41,7 +41,7 @@ This library adds a few new statements to the language:
    - Once a socket has been opened, use this statement to close it.
 - `SOCKET SEND <text> TO <socket number>`
    - Use this to send messages to an open connection. `ERRORCODE` will be set to a negative number if the send call failed.
-- `SOCKET SEND <text> TO <socket number> BYTES IN `<number var>`
+- `SOCKET SEND <text> TO <socket number> BYTES IN <number var>`
    - Same as `SOCKET SEND` but stores the number of bytes sent in `<number var>`.
 - `SOCKET READ FROM <socket number> IN <text variable>`
    - This statement should be used to check for messages on a socket connection opened with `SOCKET CONNECT TO <ip> PORT <port>`. `<text variable>` will be set to anything received from the socket, which may not be an entire "message" in whatever protocol you're using. `ERRORCODE` will be set to 1 if the connection is closed. **Note:** By default this is a blocking call. Use the next statements to change that.
