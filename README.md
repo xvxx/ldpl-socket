@@ -45,7 +45,7 @@ This library adds a few new statements to the language:
    - Same as `SOCKET SEND` but stores the number of bytes sent in `<number var>`.
 - `SOCKET READ FROM <socket number> IN <text variable>`
    - This statement should be used to check for messages on a socket connection opened with `SOCKET CONNECT TO <ip> PORT <port>`. `<text variable>` will be set to anything received from the socket, which may not be an entire "message" in whatever protocol you're using. `ERRORCODE` will be set to 1 if the connection is closed. **Note:** By default this is a blocking call. Use the next statements to change that.
-- `SOCKET READ FROM <socket number> IN <text variable> BYTES IN `<number var>`
+- `SOCKET READ FROM <socket number> IN <text variable> BYTES IN <number var>`
    - Same as `SOCKET READ` but stores the number of bytes received in `<number var>`.   
 - `SOCKET SET BLOCKING <socket number>`
 - `SOCKET SET NONBLOCKING <socket number>`
