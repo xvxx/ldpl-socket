@@ -1,0 +1,52 @@
+# Example of making a raw, simple GOPHER request.
+# Prompts you to enter a hostname on the command line.
+# Try it with "sdf.org" or "gopher.quux.org".
+
+include "../ldpl_socket/ldpl_socket.ldpl"
+
+data:
+    input is text
+    sock is number
+    reply is text
+    response is text
+    host is text
+    port is number
+    lines is list of text
+    line is text
+    parts is list of text
+    size is number
+    link is text
+
+procedure:
+    store 70 in port
+
+    ## Prompt for input.
+    display "\e[93;1m"
+    display "~ Enter hostname of Gopher server: "
+    display "\e[0;94m"
+    accept host
+    display "\e[0m"
+
+    ## Make Gopher TCP request.
+    socket connect to host at port in sock
+    socket send "/\r\n" to sock
+
+    ## Read until there's no more data coming in.
+    socket read from sock in reply
+    while reply is not equal to "" do
+        in response join response reply
+        socket read from sock in reply
+    repeat    
+
+    ## Print response. If anything broke, we'd have crashed by now ;) 
+    display "\e[92;1m~ Response from " host ":" port " on socket " sock ": \e[0m" crlf
+    trim response in response
+
+    ## Print raw response, or an error if we didn't get one.
+    if response is not equal to "" then 
+        display response 
+    else
+        display "Empty response." crlf
+    end if
+
+    
