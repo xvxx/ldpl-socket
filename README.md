@@ -1,8 +1,12 @@
 <p align="center">
   <img src="./images/ldpl-socket-logo.png">
   <br>
-  <img src="https://img.shields.io/badge/license-MIT-yellow?style=flat-square">
-  <img src="https://img.shields.io/badge/current_release-0.1.0-blue.svg?style=flat-square">
+  <a href="https://github.com/dvkt/ldpl-socket/tree/master/LICENSE">
+   <img src="https://img.shields.io/badge/license-MIT-yellow?style=flat-square">
+  </a>
+  <a href="https://github.com/dvkt/ldpl-socket/releases">
+   <img src="https://img.shields.io/badge/current_release-0.1.0-blue.svg?style=flat-square">
+  </a>
 </p>
 
 The **LDPL Socket Library** allows you to open, close, write to, and read from network sockets in [**LDPL**](https://www.github.com/lartu/ldpl).
