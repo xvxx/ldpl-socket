@@ -1,4 +1,9 @@
-![The LDPL Socket Library](images/ldpl-socket-logo.png)
+<p align="center">
+  <img src="./images/ldpl-socket-logo.png">
+  <br>
+  <img src="https://img.shields.io/badge/license-MIT-yellow?style=flat-square">
+  <img src="https://img.shields.io/badge/current_release-0.1.0-blue.svg?style=flat-square">
+</p>
 
 The **LDPL Socket Library** allows you to open, close, write to, and read from network sockets in [**LDPL**](https://www.github.com/lartu/ldpl).
 
