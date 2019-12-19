@@ -50,37 +50,50 @@ void socket_set_flags(int sock){
 
 void LDPL_SOCKET_CONNECT(){
     SETS_ERRORCODE();
+
     const string host = LDPL_SOCKET_IP.str_rep();
-    int port = LDPL_SOCKET_PORT;
+    const string port = to_string((int)LDPL_SOCKET_PORT);
+
+    struct addrinfo hints, *addrs;
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+
+    int err = getaddrinfo(host.c_str(), port.c_str(), &hints, &addrs);
+    if (err){
+        VAR_ERRORCODE = -1;
+        string e = gai_strerror(err);
+        VAR_ERRORTEXT = "getaddrinfo() failed: " + e;
+        return;
+    }
+
     int sock;
-    if((sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0){
-        VAR_ERRORCODE = sock;
-        VAR_ERRORTEXT = "socket() failed";
+    for(struct addrinfo *addr = addrs; addr != NULL; addr = addr->ai_next){
+        sock = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
+        if (sock == -1){
+            VAR_ERRORCODE = -1;
+            VAR_ERRORTEXT= "socket() failed";
+            return;
+        }
+
+        if (connect(sock, addr->ai_addr, addr->ai_addrlen) == 0)
+            break;
+
+        close(sock);
+        VAR_ERRORCODE = -1;
+        VAR_ERRORTEXT= "connect() failed";
+        return;
     }
 
-    struct sockaddr_in addr;
-    memset(&addr, 0, sizeof(addr));
-    struct hostent *h = gethostbyname(host.c_str());
-    if(h == NULL){
-        VAR_ERRORCODE = -1;
-        VAR_ERRORTEXT = "bad hostname";
-    }else if(h->h_length <= 0){
-        VAR_ERRORCODE = -1;
-        VAR_ERRORTEXT = "gethostbyname() failed";
-    }
-    char *ip = inet_ntoa(*(struct in_addr*)(h->h_addr_list[0]));
-    addr.sin_family      = AF_INET;
-    addr.sin_addr.s_addr = inet_addr(ip);
-    addr.sin_port        = htons(port);
+    freeaddrinfo(addrs);
 
-    int err;
-    if((err = connect(sock,(struct sockaddr*)&addr,sizeof(addr))) < 0){
-        VAR_ERRORCODE = err;
-        VAR_ERRORTEXT = "connect() failed";
-    }
     if(sock >= 0) {
-        socket_connected(sock, host, port);
+        socket_connected(sock, host, std::stoi(port));
         LDPL_SOCKET_NUMBER = sock;
+    } else {
+        VAR_ERRORCODE = -1;
+        VAR_ERRORTEXT= "LDPL_SOCKET_CONNECT() failed";
     }
 }
 
