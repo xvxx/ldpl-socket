@@ -81,9 +81,7 @@ void LDPL_SOCKET_CONNECT(){
             break;
 
         close(sock);
-        VAR_ERRORCODE = -1;
-        VAR_ERRORTEXT= "connect() failed";
-        return;
+        sock = -1;
     }
 
     freeaddrinfo(addrs);
