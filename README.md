@@ -1,10 +1,10 @@
 <p align="center">
   <img src="./images/ldpl-socket-logo.png">
   <br>
-  <a href="https://github.com/dvkt/ldpl-socket/tree/master/LICENSE">
+  <a href="https://github.com/xvxx/ldpl-socket/tree/master/LICENSE">
    <img src="https://img.shields.io/badge/license-MIT-yellow?style=flat-square">
   </a>
-  <a href="https://github.com/dvkt/ldpl-socket/releases">
+  <a href="https://github.com/xvxx/ldpl-socket/releases">
    <img src="https://img.shields.io/badge/current_release-0.1.0-blue.svg?style=flat-square">
   </a>
 </p>
